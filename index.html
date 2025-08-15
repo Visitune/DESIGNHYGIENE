@@ -1,159 +1,771 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <title>Évaluation Conception Hygiénique – Base principale + enrichie</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analyse Hygiénique – JSON Auto (GitHub Pages)</title>
+
+  <!-- Icônes / libs -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    :root{--bg:#0b1220;--fg:#e6edf3;--muted:#9fb0c3;--acc:#4cc3ff}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .banner{background:#081023;border-bottom:1px solid #13233f;color:#fff;padding:.6rem 1rem}
-    .wrap{max-width:1100px;margin:1rem auto;padding:0 1rem}
-    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:0 0 1rem}
-    .pill{padding:.35rem .6rem;border:1px solid #2b3f66;border-radius:999px;color:#cfe3ff;background:#0e1a33}
-    .tag{padding:.15rem .5rem;border-radius:999px;border:1px solid #304b78;color:#b2c7e6;font-size:.8rem}
-    .list{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:.6rem}
-    @media(min-width:900px){.list{grid-template-columns:repeat(2,minmax(0,1fr));}}
-    .card{background:#0f1a31;border:1px solid #1b2d52;border-radius:16px;padding:1rem;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
-    .equip{font-weight:700;color:#e9f3ff}
-    .q{margin:.25rem 0 .5rem;font-size:1.02rem}
-    .help{color:var(--muted);font-size:.95rem}
-    .meta{margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap}
-    .expert a{color:var(--acc);text-decoration:none}
-    .expert a:hover{text-decoration:underline}
-    .status{font-weight:600}
-    .hidden{display:none}
+    :root{--primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1d4ed8;--success:#059669;--success-light:#d1fae5;--warning:#d97706;--warning-light:#fef3c7;--danger:#dc2626;--danger-light:#fee2e2;--text:#1f2937;--text-light:#6b7280;--text-white:#ffffff;--bg:#f9fafb;--bg-card:#ffffff;--border:#e5e7eb;--shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;display:flex;overflow:hidden}
+    .container{display:flex;width:100%;height:100%}
+    .sidebar{width:250px;background:var(--text-white);border-right:1px solid var(--border);padding:20px 0;display:flex;flex-direction:column;box-shadow:var(--shadow);z-index:10}
+    .logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+    .logo h1{font-size:1.2rem;color:var(--primary);display:flex;align-items:center;gap:10px}
+    .nav{list-style:none;margin:0;padding:0;flex-grow:1}
+    .nav-item{margin-bottom:5px}
+    .nav-item a{display:flex;align-items:center;padding:12px 20px;text-decoration:none;color:var(--text);font-weight:500;border-left:3px solid transparent;transition:.2s}
+    .nav-item a:hover{background:var(--primary-light);color:var(--primary)}
+    .nav-item a.active{background:var(--primary-light);color:var(--primary);border-left:3px solid var(--primary)}
+    .nav-item a i{margin-right:10px;width:20px;text-align:center}
+    .content-area{flex-grow:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;position:sticky;top:-20px;background:var(--bg);padding:20px 0;z-index:5;margin:0 -20px;border-bottom:1px solid var(--border)}
+    .page-title{font-size:1.5rem;font-weight:600}
+    .progress-container-header{width:100%;background:#e9ecef;border-radius:10px;margin-top:15px;height:10px;overflow:hidden;display:none}
+    #progress-bar{height:100%;background:var(--primary);width:0;transition:width .4s ease}
+    .section{display:none;animation:fadeIn .5s ease forwards}
+    .section.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .card{background:var(--bg-card);border-radius:8px;box-shadow:var(--shadow);padding:20px;margin-bottom:20px;border:1px solid var(--border)}
+    .card-header{font-size:1.1rem;font-weight:600;margin-bottom:15px;display:flex;gap:10px;align-items:center;color:var(--primary-dark)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;border-radius:6px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s;border:none}
+    .btn i{margin-right:6px}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+    .btn-lg{padding:12px 24px;font-size:1.1rem}
+    .btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
+    .btn-outline:hover{background:var(--primary-light)}
+    .btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#047857}
+    .btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#b91c1c}
+    .form-group{margin-bottom:20px}
+    .form-group label{display:block;margin-bottom:8px;font-weight:500}
+    .form-control{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);font-size:1rem}
+    .form-control:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+    .certification-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:.75rem;font-weight:700;color:#fff}
+    .certification-badge.ehedg{background:#059669}.certification-badge.three-a{background:#2563eb}.certification-badge i{margin-right:4px;font-size:.8rem}
+    .expander{border:1px solid var(--border);border-radius:8px;margin-bottom:15px;overflow:hidden;background:var(--bg-card);transition:box-shadow .2s}
+    .expander:hover{box-shadow:0 1px 5px rgba(0,0,0,.05)}
+    .expander-header{padding:15px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:#f8fafc;transition:background .2s}
+    .expander-header:hover{background:#f1f5f9}
+    .expander-title{font-weight:600;font-size:1rem;color:var(--primary-dark);flex:1}
+    .expander-icon{transition:transform .3s;margin-right:10px;color:var(--text-light)}
+    .expander.active .expander-icon{transform:rotate(90deg)}
+    .expander-content{max-height:0;overflow:hidden;transition:max-height .3s ease-out,padding .3s ease-out;padding:0 20px}
+    .expander.active .expander-content{padding-top:15px;padding-bottom:20px;border-top:1px solid var(--border)}
+    .status-indicator{display:flex;align-items:center;margin-left:auto;background:#e5e7eb;color:#6b7280;padding:3px 10px;border-radius:50px;font-size:.75rem;font-weight:700;white-space:nowrap}
+    .status-indicator.completed{background:var(--success-light);color:var(--success)}
+    .status-indicator.incomplete{background:var(--danger-light);color:var(--danger)}
+    .status-dot{width:6px;height:6px;border-radius:50%;margin-right:5px}
+    .status-dot.completed{background:var(--success)}.status-dot.incomplete{background:var(--danger)}.status-dot.neutral{background:#9ca3af}
+    .question-section{padding:15px 0;border-bottom:1px solid #f0f0f5;transition:background-color .5s}
+    .question-section:last-child{border-bottom:none}
+    .question-section.error-highlight{background:var(--danger-light)}
+    .question-content{display:flex;align-items:flex-start;margin-bottom:10px}
+    .info-button{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--primary-light);color:#fff;border-radius:50%;margin-left:8px;font-size:.7rem;cursor:help;border:none;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+    .info-button:hover{transform:scale(1.1);background:var(--primary)}
+    .help-text{margin:8px 0 12px 36px;padding:10px 15px;background:#f0f9ff;border-left:3px solid var(--primary);border-radius:0 4px 4px 0;font-size:.9rem;color:var(--text-light);display:none}
+    .expert-info{margin:10px 0 0 36px;padding:10px 15px;background:#f8f9fa;border:1px dashed var(--border);border-radius:4px;font-size:.85rem;color:var(--text-light)}
+    .radio-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+    .radio-option{display:flex;align-items:center}
+    .radio-input{display:none}
+    .radio-visual{display:flex;align-items:center;padding:8px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:.2s;font-size:.9rem}
+    .radio-visual:hover{background:#f8f9fa}
+    .radio-input:checked + .radio-visual{border-color:var(--primary);background:var(--primary-light)}
+    .radio-icon{margin-right:5px;font-size:.9rem}
+    .radio-icon.conforme{color:var(--success)}.radio-icon.non-conforme{color:var(--danger)}.radio-icon.a-ameliorer{color:var(--warning)}
+    .textarea-field{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;resize:vertical;min-height:70px;font:inherit;font-size:.95rem;background:#fff}
+    .textarea-field::placeholder{color:var(--text-light);font-style:italic}
+    .textarea-field:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+    .sticky-button-bar{position:sticky;bottom:-21px;background:linear-gradient(to top,rgba(249,250,251,1) 80%,rgba(249,250,251,0));padding:20px;margin:20px -20px -20px;text-align:right;z-index:5}
+    .report-header{font-size:1.2rem;font-weight:600;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--primary-dark)}
+    .report-subheader{font-size:.9rem;color:var(--text-light);margin-bottom:20px}
+    .report-group-title{font-size:1.1rem;font-weight:600;margin:20px 0 15px;color:var(--primary);border-bottom:1px solid var(--border);padding-bottom:5px}
+    .report-item{padding:10px 0;border-bottom:1px solid var(--border)}
+    .report-item:last-child{border-bottom:none}
+    .report-question{font-weight:500;margin-bottom:5px}
+    .report-answer{display:inline-block;padding:3px 8px;border-radius:4px;font-size:.9rem;font-weight:500}
+    .report-answer.conforme{background:var(--success-light);color:var(--success)}
+    .report-answer.non-conforme{background:var(--danger-light);color:var(--danger)}
+    .report-answer.a-ameliorer{background:var(--warning-light);color:var(--warning)}
+    .report-comment{margin-top:5px;font-size:.9rem;color:var(--text-light);font-style:italic}
+    .chart-container{position:relative;margin:auto;height:250px;width:250px;margin-bottom:20px}
+    .import-container{padding:20px;background:#f8f9fa;border-radius:8px;margin-bottom:25px;border:1px solid var(--border)}
+    .drop-area{border:2px dashed var(--border);border-radius:8px;padding:30px;text-align:center;cursor:pointer;transition:.2s;background:var(--bg-card)}
+    .drop-area:hover,.drop-area.dragover{border-color:var(--primary);background:var(--primary-light)}
+    .drop-area i{font-size:2.5rem;color:var(--primary);margin-bottom:15px}
+    .drop-area p{margin-bottom:15px;color:var(--text-light)}
+    .file-input{display:none}
+    .template-link{display:inline-flex;align-items:center;gap:5px;margin-top:15px;color:var(--primary);text-decoration:none;font-weight:500}
+    .template-link:hover{text-decoration:underline}
+    #notification{position:fixed;top:20px;right:20px;padding:15px 20px;border-radius:6px;color:#fff;font-weight:500;box-shadow:0 4px 6px rgba(0,0,0,.1);z-index:1000;opacity:0;transform:translateY(-20px);transition:.3s;max-width:420px}
+    .notification{font-size:.9rem;display:flex;align-items:flex-start}
+    .notification i{margin-right:10px;margin-top:2px}
+    .notification.show{opacity:1;transform:translateY(0)}
+    .notification.error{background:var(--danger)}.notification.warning{background:var(--warning);color:#4d2f00}.notification.info{background:var(--primary)}.notification.success{background:var(--success)}
+    .notification-content{flex-grow:1}
+    .notification-actions{margin-top:10px;display:flex;gap:10px;justify-content:flex-end}
+    @media print{
+      @page{size:A4;margin:15mm}
+      html,body{height:auto;overflow:visible;background:#fff!important;display:block;font-size:9pt}
+      .sidebar,.button-group,.import-container,.standard-filter,.page-header .progress-container-header,.expert-toggle,#notification,.expander-controls,.sticky-button-bar{display:none!important}
+      .container{display:block!important;height:auto}
+      .content-area{margin-left:0!important;padding:0!important;width:100%!important;height:auto;overflow:visible}
+      .section{display:block!important}
+      #intro-section,#import-section{display:none!important}
+      #report-section{display:block!important}
+      .card{box-shadow:none!important;border:1px solid #000!important;page-break-inside:avoid}
+      .expander,.question-section{page-break-inside:avoid}
+      .help-text,.expert-info{display:block!important}
+    }
+    @media(max-width:768px){
+      .sidebar{width:70px}.logo h1 span,.nav-item a span{display:none}
+      .logo h1 i,.nav-item a i{margin-right:0}
+      .page-header{flex-direction:column;align-items:flex-start}
+      .btn{flex-grow:1;justify-content:center}
+    }
   </style>
 </head>
 <body>
-  <div class="banner">
-    Chargement des données… <span id="loadStatus" class="status">base principale</span>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo"><h1><i class="fas fa-vial"></i> <span>Analyse Hygiénique</span></h1></div>
+      <ul class="nav">
+        <li class="nav-item"><a href="#" class="active" data-step="intro"><i class="fas fa-home"></i> <span>Accueil</span></a></li>
+        <li class="nav-item"><a href="#" data-step="evaluation"><i class="fas fa-clipboard-list"></i> <span>Évaluation</span></a></li>
+        <li class="nav-item"><a href="#" data-step="import"><i class="fas fa-file-import"></i> <span>Importer</span></a></li>
+        <li class="nav-item"><a href="#" data-step="report"><i class="fas fa-chart-bar"></i> <span>Rapport</span></a></li>
+      </ul>
+    </nav>
+
+    <main class="content-area">
+      <header class="page-header">
+        <h2 class="page-title">Analyse de Conformité Hygiénique</h2>
+        <div class="progress-container-header" title="Progression de l'évaluation">
+          <div id="progress-bar"></div>
+        </div>
+      </header>
+
+      <section id="intro-section" class="section active">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-info-circle"></i> Bienvenue</div>
+          <p>Cette application évalue la conception hygiénique selon <strong>EHEDG</strong> et <strong>3-A</strong>. Elle charge automatiquement votre base JSON enrichie depuis le <em>même</em> repo GitHub Pages.</p>
+          <ol style="margin-top:.5rem">
+            <li>Choisissez un type d’équipement ou importez vos critères.</li>
+            <li>Répondez et ajoutez des commentaires (mode Expert pour afficher les références).</li>
+            <li>Générez un rapport (graphique + détails), export PDF/CSV.</li>
+          </ol>
+          <div style="text-align:center;margin-top:20px">
+            <button class="btn btn-primary btn-lg" id="start-eval-btn"><i class="fas fa-play"></i> Commencer</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="import-section" class="section">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-file-csv"></i> Importer des Questions (CSV)</div>
+          <p>Vous pouvez importer vos propres critères. Les colonnes doivent être exactement : <code>Equipment Type</code>, <code>Question</code>, <code>Help Text</code>, <code>Group</code>, <code>Standard</code>, <code>Doc Ref</code>. (Un champ facultatif <code>docLink</code> sera accepté si présent.)</p>
+          <div class="import-container">
+            <div class="drop-area" id="drop-area">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Glissez-déposez votre fichier CSV ici</p>
+              <p>ou</p>
+              <button type="button" class="btn btn-primary" id="file-select-btn"><i class="fas fa-folder-open"></i> Parcourir</button>
+              <input type="file" id="file-input" class="file-input" accept=".csv"/>
+            </div>
+            <a href="#" class="template-link" id="download-template"><i class="fas fa-download"></i> Télécharger le modèle CSV</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="evaluation-section" class="section">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-tasks"></i> Évaluation de l'Équipement</div>
+          <div class="form-group">
+            <label for="equipment-type"><i class="fas fa-cog"></i> Sélectionnez un type :</label>
+            <select id="equipment-type" class="form-control">
+              <option value="">-- Choisissez --</option>
+              <!-- Les options seront complétées dynamiquement en fonction du JSON -->
+            </select>
+          </div>
+
+          <div class="standard-filter">
+            <span>Filtrer :</span>
+            <label class="certification-badge ehedg"><input type="checkbox" id="ehedg-filter" checked style="margin-right:6px">EHEDG</label>
+            <label class="certification-badge three-a"><input type="checkbox" id="three-a-filter" checked style="margin-right:6px">3-A</label>
+          </div>
+
+          <div class="expert-toggle"><input type="checkbox" id="expert-mode"><label for="expert-mode" style="margin-left:8px">Mode Expert (références)</label></div>
+        </div>
+
+        <div class="expander-controls" style="display:flex;gap:10px;margin-bottom:20px">
+          <button type="button" id="expand-all-btn" class="btn btn-outline"><i class="fas fa-plus-square"></i> Tout ouvrir</button>
+          <button type="button" id="collapse-all-btn" class="btn btn-outline"><i class="fas fa-minus-square"></i> Tout fermer</button>
+        </div>
+
+        <form id="hygiene-form">
+          <div style="text-align:center;padding:40px;color:var(--text-light)">
+            <i class="fas fa-arrow-up" style="font-size:2rem;margin-bottom:15px"></i>
+            <p>Sélectionnez un type d'équipement pour commencer.</p>
+          </div>
+        </form>
+
+        <div class="sticky-button-bar">
+          <button type="button" id="generate-report-btn" class="btn btn-primary btn-lg"><i class="fas fa-chart-bar"></i> Générer le Rapport</button>
+        </div>
+      </section>
+
+      <section id="report-section" class="section">
+        <div class="card">
+          <div class="card-header"><i class="fas fa-tachometer-alt"></i> Résumé</div>
+          <div class="chart-container"><canvas id="report-chart"></canvas></div>
+        </div>
+        <div id="report-detailed-content">
+          <h2 class="report-header">Rapport Détaillé</h2>
+          <div class="report-subheader"></div>
+          <p>Générez un rapport pour afficher les détails.</p>
+        </div>
+        <br/>
+        <div class="button-group" style="display:flex;gap:10px">
+          <button type="button" class="btn btn-primary" onclick="printReport()"><i class="fas fa-print"></i> Imprimer</button>
+          <button type="button" class="btn btn-outline" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> Exporter PDF</button>
+          <button type="button" class="btn btn-outline" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> Exporter CSV</button>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="wrap">
-    <div class="toolbar">
-      <span class="pill">Déduplication (Type + Question)</span>
-      <span class="pill">Structure conservée (6 colonnes)</span>
-      <span class="pill">docLink facultatif</span>
-    </div>
-
-    <div id="app" class="list"></div>
-  </div>
+  <div id="notification" role="alert" aria-live="assertive"></div>
 
   <script>
-    /********************************************************************
-     * CONFIG – Mets ici les URL des deux bases:
-     * - PRIMARY_JSON_URL    : ta base principale (ou laisse vide pour l’exemple)
-     * - ENRICHED_JSON_URL   : la base enrichie (ce dépôt GitHub Pages)
-     ********************************************************************/
-    const PRIMARY_JSON_URL  = ""; // ex: "./base_principale.json" (si tu en as une)
-    const ENRICHED_JSON_URL = "./hygienic_design_enriched.json"; // même repo GitHub Pages
+    /**********************
+     * CONFIG
+     **********************/
+    const ENRICHED_JSON_URL = "./hygienic_design_enriched.json"; // même repo
+    const EXPECTED_KEYS = ["Equipment Type","Question","Help Text","Group","Standard","Doc Ref"]; // structure stricte
 
-    // Colonnes strictes (structure d’origine)
-    const EXPECTED_KEYS = ["Equipment Type","Question","Help Text","Group","Standard","Doc Ref"];
-
-    // Jeu minimal si pas de base principale disponible
-    const FALLBACK_PRIMARY = [
+    /**********************
+     * Données par défaut (fallback minimal si JSON absent)
+     * Tu peux les supprimer si tu ne veux QUE le JSON
+     **********************/
+    const DEFAULT_REQUIREMENTS = [
       {"Equipment Type":"convoyeur","Question":"Châssis ouvert (open frame), accès total pour le nettoyage ?","Help Text":"Privilégier montants ajourés ; éviter caissons fermés.","Group":"Conception Géométrique","Standard":"EHEDG","Doc Ref":"EHEDG Open Processing (2024)"}
     ];
 
-    function makeKey(rec){
-      return `${(rec["Equipment Type"]||"").toLowerCase()}::${(rec["Question"]||"").toLowerCase()}`;
-    }
+    /**********************
+     * État / sélecteurs
+     **********************/
+    const STATE_KEY = "hygiene_evaluation_state";
+    const equipmentTypeSelect = document.getElementById('equipment-type');
+    const hygieneForm = document.getElementById('hygiene-form');
+    const progressBar = document.getElementById('progress-bar');
+    const progressBarContainer = document.querySelector('.progress-container-header');
+    const ehedgFilter = document.getElementById('ehedg-filter');
+    const threeAFilter = document.getElementById('three-a-filter');
+    const expertMode = document.getElementById('expert-mode');
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file-input');
+    const downloadTemplateBtn = document.getElementById('download-template');
+    const notification = document.getElementById('notification');
+    let customEquipments = {}; // via CSV
+    let jsonEquipments = {};   // via JSON externe
+    let currentRequirements = [];
+    let myReportChart = null;
 
+    /**********************
+     * Utilitaires
+     **********************/
+    const escapeHTML = (s)=>{const p=document.createElement('p');p.textContent=String(s??"");return p.innerHTML};
+    const makeKey = (rec)=>`${(rec["Equipment Type"]||"").toLowerCase()}::${(rec["Question"]||"").toLowerCase()}`;
     function normalizeRecord(rec){
-      const out = {};
-      for (const k of EXPECTED_KEYS) out[k] = (rec && rec[k]) || "";
-      if (typeof rec.docLink === "string" && /^https?:\/\//.test(rec.docLink)) out.docLink = rec.docLink;
+      const out={}; for(const k of EXPECTED_KEYS) out[k]=rec?.[k]??"";
+      if (rec?.docLink && /^https?:\/\//.test(rec.docLink)) out.docLink = rec.docLink;
       return out;
     }
-
-    async function fetchJsonMaybe(url){
-      if (!url) return null;
-      const res = await fetch(url, {cache:"no-store"});
-      if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
-      return await res.json();
+    function showNotification(msg,type="info",persistent=false){
+      clearTimeout(showNotification._t);
+      notification.innerHTML = `<div class="notification ${type} show"><i class="fas fa-info-circle"></i><div class="notification-content">${msg}</div></div>`;
+      notification.className = `notification ${type} show`;
+      if(!persistent){ showNotification._t=setTimeout(()=>notification.classList.remove('show'),5000); }
     }
 
-    async function getPrimaryData(){
-      document.getElementById('loadStatus').textContent = "base principale…";
+    /**********************
+     * JSON loader & fusion
+     **********************/
+    async function loadJsonEnriched(){
       try{
-        const data = await fetchJsonMaybe(PRIMARY_JSON_URL);
-        if (!data) return FALLBACK_PRIMARY.slice();
-        if (!Array.isArray(data)) throw new Error("Base principale: JSON doit être un tableau.");
-        return data.map(normalizeRecord);
-      }catch(e){
-        console.warn("Primary indisponible:", e);
-        return FALLBACK_PRIMARY.slice();
-      }
-    }
-
-    async function getEnrichedData(){
-      document.getElementById('loadStatus').textContent = "base enrichie…";
-      const res = await fetch(ENRICHED_JSON_URL, {cache:"no-store"});
-      if (!res.ok) throw new Error(`Base enrichie HTTP ${res.status}`);
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error("Base enrichie: JSON doit être un tableau.");
-      return data.map(normalizeRecord);
-    }
-
-    function mergeBases(primary, enriched){
-      const map = new Map();
-      for (const r of primary) map.set(makeKey(r), normalizeRecord(r));
-      for (const r of enriched){
-        const k = makeKey(r);
-        if (!map.has(k)) {
-          map.set(k, normalizeRecord(r));
-        } else {
-          // Complète uniquement les champs vides de la base primaire
-          const base = map.get(k);
-          for (const key of EXPECTED_KEYS){
-            if (!base[key] && r[key]) base[key] = r[key];
-          }
-          if (!base.docLink && r.docLink) base.docLink = r.docLink;
+        const res=await fetch(ENRICHED_JSON_URL,{cache:"no-store"});
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const arr = await res.json();
+        if(!Array.isArray(arr)) throw new Error("JSON enrichi doit être un tableau.");
+        // group by Equipment Type
+        const grouped = {};
+        for(const r of arr.map(normalizeRecord)){
+          const et = r["Equipment Type"]?.trim();
+          if(!et) continue;
+          if(!grouped[et]) grouped[et]=[];
+          grouped[et].push({
+            question: r["Question"],
+            help: r["Help Text"],
+            type: "radio",
+            options: ["Conforme","Non conforme","À améliorer"],
+            group: r["Group"],
+            standard: r["Standard"],
+            docRef: r["Doc Ref"],
+            docLink: r.docLink
+          });
         }
+        return grouped;
+      }catch(e){
+        console.warn("JSON enrichi indisponible:", e);
+        return {};
       }
+    }
+
+    function getAllEquipmentTypes(){
+      // priorités: CSV importé > JSON > défauts
+      const set = new Set([
+        ...Object.keys(jsonEquipments||{}),
+        ...Object.keys(customEquipments||{})
+      ]);
+      if (DEFAULT_REQUIREMENTS.length){
+        DEFAULT_REQUIREMENTS.forEach(r=>set.add(r["Equipment Type"]));
+      }
+      return Array.from(set).sort((a,b)=>a.localeCompare(b,'fr',{sensitivity:'base'}));
+    }
+
+    function getCurrentRequirements(equipType){
+      // base par défaut pour ce type
+      const defaults = DEFAULT_REQUIREMENTS
+        .filter(r => r["Equipment Type"]===equipType)
+        .map(r => ({
+          question:r["Question"], help:r["Help Text"], type:"radio",
+          options:["Conforme","Non conforme","À améliorer"],
+          group:r["Group"], standard:r["Standard"], docRef:r["Doc Ref"], docLink:r.docLink
+        }));
+
+      // depuis JSON
+      const json = (jsonEquipments[equipType]||[]);
+
+      // depuis CSV importé (prioritaire pour compléter)
+      const csv = (customEquipments[equipType]||[]);
+
+      // fusion non destructive + dédup (clé Type+Question)
+      const map = new Map();
+      const pushAll = (arr)=>{
+        for(const r of arr){
+          const norm = normalizeRecord({
+            "Equipment Type": equipType,
+            "Question": r.question,
+            "Help Text": r.help,
+            "Group": r.group,
+            "Standard": r.standard,
+            "Doc Ref": r.docRef,
+            "docLink": r.docLink
+          });
+          const crit = {
+            question: norm["Question"], help: norm["Help Text"], type:"radio",
+            options:["Conforme","Non conforme","À améliorer"],
+            group: norm["Group"], standard: norm["Standard"], docRef: norm["Doc Ref"], docLink: norm.docLink
+          };
+          const k = makeKey({"Equipment Type":equipType,"Question":crit.question});
+          if(!map.has(k)) map.set(k, crit);
+          else{
+            const base = map.get(k);
+            // compléter seulement champs vides
+            ["help","group","standard","docRef","docLink"].forEach(f=>{
+              if(!base[f] && crit[f]) base[f]=crit[f];
+            });
+          }
+        }
+      };
+      pushAll(defaults); pushAll(json); pushAll(csv);
       return Array.from(map.values());
     }
 
-    function renderUI(rows){
-      const app = document.getElementById('app');
-      app.innerHTML = "";
-      rows.forEach(r=>{
-        const card = document.createElement('div');
-        card.className = "card";
-        card.innerHTML = `
-          <div class="equip">${r["Equipment Type"]}</div>
-          <div class="q">${r["Question"]}</div>
-          <div class="help">${r["Help Text"]||""}</div>
-          <div class="meta">
-            ${r["Group"]? `<span class="tag">${r["Group"]}</span>`:""}
-            ${r["Standard"]? `<span class="tag">${r["Standard"]}</span>`:""}
-            ${r["Doc Ref"]? `<span class="tag">Réf: ${r["Doc Ref"]}</span>`:""}
-            ${r.docLink? `<span class="expert"><a href="${r.docLink}" target="_blank" rel="noopener">Lien</a></span>`:""}
-          </div>
-        `;
-        app.appendChild(card);
-      });
-      document.getElementById('loadStatus').textContent = "fusion terminée";
+    /**********************
+     * Navigation / UI
+     **********************/
+    function navigateToStep(step){
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.querySelectorAll('.nav-item a').forEach(a=>a.classList.remove('active'));
+      const section = document.getElementById(`${step}-section`);
+      const link = document.querySelector(`.nav-item a[data-step="${step}"]`);
+      if(section) section.classList.add('active');
+      if(link) link.classList.add('active');
+      progressBarContainer.style.display = (step==='evaluation')?'flex':'none';
+      const titleEl = document.querySelector('.page-title');
+      if(step==='evaluation'){
+        const txt = equipmentTypeSelect.options[equipmentTypeSelect.selectedIndex]?.text || 'Équipement';
+        titleEl.textContent = `Évaluation : ${txt}`;
+      } else if(step==='report'){
+        const txt = equipmentTypeSelect.options[equipmentTypeSelect.selectedIndex]?.text || 'Rapport';
+        titleEl.textContent = `Rapport : ${txt}`;
+      } else if(step==='import'){ titleEl.textContent='Importer des Critères'; }
+      else { titleEl.textContent='Analyse de Conformité Hygiénique'; }
+      document.querySelector('.content-area').scrollTop = 0;
     }
 
-    (async function bootstrap(){
-      try{
-        const primary = await getPrimaryData();
-        const enriched = await getEnrichedData().catch(e=>{
-          console.warn("Base enrichie indisponible:", e);
-          document.getElementById('loadStatus').textContent = "base enrichie indisponible (OK)";
-          return [];
+    function buildForm(equipType, requirements){
+      const groups = requirements.reduce((acc,r)=>{
+        const g=r.group||'Autres'; (acc[g]=acc[g]||[]).push(r); return acc;
+      },{});
+      hygieneForm.innerHTML='';
+      Object.keys(groups).sort().forEach((gn,idx)=>{
+        const exp = createExpander(gn, groups[gn], idx===0);
+        hygieneForm.appendChild(exp);
+      });
+      initFormEvents();
+      applyFiltersAndRefresh();
+    }
+
+    function createExpander(groupName, items, isOpen){
+      const expId = `exp-${groupName.replace(/[^a-z0-9]+/gi,'-')}`;
+      const exp = document.createElement('div'); exp.className=`expander ${isOpen?'active':''}`;
+      const header = document.createElement('div');
+      header.className='expander-header'; header.setAttribute('role','button');
+      header.setAttribute('aria-expanded',String(isOpen));
+      header.setAttribute('aria-controls',`${expId}-content`);
+      header.innerHTML = `
+        <i class="fas fa-chevron-right expander-icon"></i>
+        <span class="expander-title">${escapeHTML(groupName)}</span>
+        <span class="status-indicator"><span class="status-dot neutral"></span><span class="status-text">Non évalué</span></span>`;
+      const content = document.createElement('div');
+      content.className='expander-content'; content.id=`${expId}-content`;
+
+      items.forEach((req,i)=>{
+        const uid = `${expId}-q${i}`;
+        req._uid = uid;
+        content.appendChild(createQuestionElement(req, uid));
+      });
+
+      exp.append(header,content);
+      header.addEventListener('click',()=>toggleExpander(exp));
+      return exp;
+    }
+
+    function createQuestionElement(req, uid){
+      const sec = document.createElement('div');
+      sec.className='question-section';
+      sec.dataset.standard = req.standard || 'General';
+      const helpBtn = req.help ? `<button type="button" class="info-button" aria-label="Plus d'info"><i class="fas fa-info"></i></button>` : '';
+      sec.innerHTML = `
+        <div class="question-content">${escapeHTML(req.question)} ${helpBtn}</div>
+        ${req.help? `<div class="help-text">${escapeHTML(req.help)}</div>`:''}
+        ${req.docRef? `<div class="expert-info" style="display:none"><strong>Référence :</strong> ${escapeHTML(req.docRef)}${req.docLink? ` — <a href="${req.docLink}" target="_blank" rel="noopener">Lien</a>`:''}</div>`:''}
+        <div class="radio-group" role="radiogroup">
+          ${['Conforme','Non conforme','À améliorer'].map(opt=>{
+            const cls = opt.toLowerCase().replace(/\s+/g,'-');
+            const icon = ({'conforme':'fa-check-circle','non-conforme':'fa-times-circle','a-ameliorer':'fa-exclamation-circle'})[cls];
+            return `<div class="radio-option">
+              <input type="radio" class="radio-input" id="${uid}-${cls}" name="${uid}" value="${opt}">
+              <label class="radio-visual" for="${uid}-${cls}">
+                <i class="fas ${icon} radio-icon ${cls}"></i> ${escapeHTML(opt)}
+              </label>
+            </div>`;
+          }).join('')}
+        </div>
+        <textarea class="textarea-field" name="${uid}-comment" placeholder="Ajouter un commentaire..."></textarea>`;
+      const infoBtn = sec.querySelector('.info-button');
+      if(infoBtn){ infoBtn.addEventListener('click',(e)=>{ e.stopPropagation(); const t=sec.querySelector('.help-text'); t.style.display=(t.style.display==='block'?'none':'block');}); }
+      return sec;
+    }
+
+    function initFormEvents(){
+      hygieneForm.querySelectorAll('.radio-input,.textarea-field').forEach(el=>{
+        el.addEventListener('change',()=>{
+          updateGroupStatus(el.closest('.expander'));
+          updateProgressBar();
+          saveState();
         });
-        const merged = mergeBases(primary, enriched);
-        renderUI(merged);
-      }catch(err){
-        console.error(err);
-        document.getElementById('loadStatus').textContent = "erreur de chargement";
+      });
+    }
+
+    function toggleExpander(expander, force){
+      const content = expander.querySelector('.expander-content');
+      const header = expander.querySelector('.expander-header');
+      const active = typeof force==='boolean' ? force : !expander.classList.contains('active');
+      expander.classList.toggle('active',active); header.setAttribute('aria-expanded',active);
+      content.style.maxHeight = active ? (content.scrollHeight+'px') : '0';
+    }
+    function toggleAllExpanders(on){
+      document.querySelectorAll('#hygiene-form .expander').forEach(e=>toggleExpander(e,on));
+    }
+
+    function applyFilters(){
+      const se = ehedgFilter.checked, s3 = threeAFilter.checked, expert = expertMode.checked;
+      hygieneForm.querySelectorAll('.question-section').forEach(q=>{
+        const st = (q.dataset.standard||'').toUpperCase();
+        const vis = (st==='GENERAL') || (st==='EHEDG'&&se) || (st==='3-A'&&s3);
+        q.style.display = vis ? '' : 'none';
+      });
+      hygieneForm.querySelectorAll('.expert-info').forEach(el=>el.style.display = expert ? 'block':'none');
+      document.querySelectorAll('.expander.active .expander-content').forEach(c=>c.style.maxHeight=c.scrollHeight+'px');
+    }
+    function applyFiltersAndRefresh(){
+      applyFilters();
+      document.querySelectorAll('.expander').forEach(updateGroupStatus);
+      updateProgressBar();
+      saveState();
+    }
+
+    function updateGroupStatus(exp){
+      if(!exp) return;
+      const indicator = exp.querySelector('.status-indicator');
+      const dot = indicator.querySelector('.status-dot');
+      const txt = indicator.querySelector('.status-text');
+      const qs = Array.from(exp.querySelectorAll('.question-section')).filter(q=>q.style.display!=='none');
+      const answered = qs.filter(q=>q.querySelector('input:checked'));
+      indicator.classList.remove('completed','incomplete'); dot.classList.remove('completed','incomplete','neutral');
+      if(qs.length===0){ txt.textContent='N/A'; dot.classList.add('neutral'); }
+      else if(answered.length===qs.length){
+        const hasNC = answered.some(q=>q.querySelector('input:checked').value==='Non conforme');
+        indicator.classList.add(hasNC?'incomplete':'completed');
+        dot.classList.add(hasNC?'incomplete':'completed');
+        txt.textContent = hasNC ? 'Non Conforme' : 'Complété';
+      } else { txt.textContent=`${answered.length}/${qs.length}`; dot.classList.add('neutral'); }
+    }
+    function updateProgressBar(){
+      const vis = Array.from(hygieneForm.querySelectorAll('.question-section')).filter(q=>q.style.display!=='none');
+      const ans = vis.filter(q=>q.querySelector('.radio-input:checked')).length;
+      progressBar.style.width = (vis.length? (ans/vis.length)*100 : 0) + '%';
+    }
+
+    /**********************
+     * État – sauvegarde/restauration
+     **********************/
+    function saveState(){
+      const et = equipmentTypeSelect.value; if(!et) return;
+      const answers = {};
+      hygieneForm.querySelectorAll('input[type="radio"]:checked, textarea').forEach(input=>answers[input.name]=input.value);
+      const state = {equipmentType:et, answers, filters:{ehedg:ehedgFilter.checked, threeA:threeAFilter.checked, expert:expertMode.checked}};
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    }
+    function clearState(){ localStorage.removeItem(STATE_KEY); }
+    function applyState(state){
+      equipmentTypeSelect.value = state.equipmentType;
+      ehedgFilter.checked = !!state.filters.ehedg;
+      threeAFilter.checked = !!state.filters.threeA;
+      expertMode.checked = !!state.filters.expert;
+      equipmentTypeSelect.dispatchEvent(new Event('change',{bubbles:true}));
+      setTimeout(()=>{
+        Object.entries(state.answers||{}).forEach(([n,v])=>{
+          const r = hygieneForm.querySelector(`input[name="${n}"][value="${v}"]`); if(r) r.checked=true;
+          const t = hygieneForm.querySelector(`textarea[name="${n}"]`); if(t) t.value=v;
+        });
+        applyFiltersAndRefresh(); navigateToStep('evaluation');
+      },120);
+    }
+    function promptToRestoreState(state){
+      showNotification(`
+        Une évaluation pour <strong>"${escapeHTML(state.equipmentType)}"</strong> est en cours.
+        <div class="notification-actions">
+          <button class="btn btn-success" id="restore-btn">Restaurer</button>
+          <button class="btn btn-danger" id="discard-btn">Annuler</button>
+        </div>`, 'info', true);
+      document.getElementById('restore-btn').onclick = ()=>{ applyState(state); notification.classList.remove('show'); };
+      document.getElementById('discard-btn').onclick = ()=>{ clearState(); notification.classList.remove('show'); };
+    }
+
+    /**********************
+     * Rapport / exports
+     **********************/
+    function validateForm(){
+      let ok=true, first=null;
+      hygieneForm.querySelectorAll('.question-section').forEach(sec=>{
+        if(sec.style.display==='none') return;
+        if(!sec.querySelector('.radio-input:checked')){ ok=false; if(!first) first=sec; }
+      });
+      return {isValid:ok, firstErrorElement:first};
+    }
+    function collectFormData(){
+      const data=[];
+      hygieneForm.querySelectorAll('.question-section').forEach(sec=>{
+        if(sec.style.display==='none') return;
+        const r = sec.querySelector('.radio-input:checked'); if(!r) return;
+        data.push({
+          question: sec.querySelector('.question-content').textContent.trim(),
+          answer: r.value,
+          comment: sec.querySelector('.textarea-field').value,
+          group: '—'
+        });
+      });
+      return data;
+    }
+    function generateReport(){
+      const {isValid, firstErrorElement} = validateForm();
+      if(!isValid){
+        showNotification("Veuillez répondre à toutes les questions visibles.","error");
+        firstErrorElement.scrollIntoView({behavior:'smooth',block:'center'});
+        firstErrorElement.classList.add('error-highlight'); setTimeout(()=>firstErrorElement.classList.remove('error-highlight'),2200);
+        return;
       }
-    })();
+      const formData = collectFormData();
+      const scores = {'Conforme':0,'À améliorer':0,'Non conforme':0};
+      const detailed={};
+      formData.forEach(it=>{
+        scores[it.answer]++; (detailed[it.group]=detailed[it.group]||[]).push(it);
+      });
+
+      const equipName = equipmentTypeSelect.options[equipmentTypeSelect.selectedIndex]?.text;
+      const evalDate = new Date().toLocaleDateString('fr-FR');
+      const std = [ehedgFilter.checked?'EHEDG':null, threeAFilter.checked?'3-A':null].filter(Boolean).join(' & ') || 'Général';
+      document.querySelector('#report-detailed-content .report-header').textContent = `Rapport Détaillé - ${equipName}`;
+      document.querySelector('#report-detailed-content .report-subheader').innerHTML = `<strong>Date :</strong> ${evalDate} | <strong>Standards :</strong> ${std}`;
+
+      let html='';
+      const items = Array.from(hygieneForm.querySelectorAll('.question-section')).filter(q=>q.style.display!=='none');
+      items.forEach(sec=>{
+        const q = sec.querySelector('.question-content').textContent.trim();
+        const ans = sec.querySelector('.radio-input:checked')?.value || '—';
+        const com = sec.querySelector('.textarea-field').value;
+        const cls = ans.toLowerCase().replace(/\s+/g,'-');
+        html += `<div class="report-item">
+          <div class="report-question">${escapeHTML(q)}</div>
+          <div class="report-answer ${cls}">${escapeHTML(ans)}</div>
+          ${com? `<div class="report-comment"><em>Commentaire :</em> ${escapeHTML(com)}</div>`:''}
+        </div>`;
+      });
+      const reportContainer = document.getElementById('report-detailed-content');
+      reportContainer.querySelector('p')?.remove();
+      let holder = reportContainer.querySelector('.report-card-container');
+      if(!holder){ holder=document.createElement('div'); holder.className='report-card-container'; reportContainer.appendChild(holder); }
+      holder.innerHTML = html;
+
+      const ctx=document.getElementById('report-chart').getContext('2d'); if(myReportChart) myReportChart.destroy();
+      myReportChart = new Chart(ctx,{
+        type:'doughnut',
+        data:{labels:Object.keys(scores),datasets:[{data:Object.values(scores),backgroundColor:['rgba(5,150,105,.7)','rgba(217,119,6,.7)','rgba(220,38,38,.7)'],borderColor:['#059669','#d97706','#dc2626'],borderWidth:1}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}
+      });
+
+      navigateToStep('report'); showNotification("Rapport généré.","success"); clearState();
+    }
+    function exportToPDF(){ window.print(); }
+    function exportToCSV(){
+      const rows=[["Equipment Type","Question","Réponse","Commentaire"]];
+      const equipName = equipmentTypeSelect.options[equipmentTypeSelect.selectedIndex]?.text || '';
+      Array.from(document.querySelectorAll('.report-item')).forEach(it=>{
+        const q = it.querySelector('.report-question')?.textContent || '';
+        const a = it.querySelector('.report-answer')?.textContent || '';
+        const c = it.querySelector('.report-comment')?.textContent.replace(/^Commentaire:\s*/,'') || '';
+        rows.push([equipName,q,a,c]);
+      });
+      const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
+      const link = Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'rapport_hygienique.csv'}); link.click(); URL.revokeObjectURL(link.href);
+    }
+
+    /**********************
+     * Import CSV
+     **********************/
+    function handleFiles(files){ ([...files]).forEach(processFile); }
+    function preventDefaults(e){ e.preventDefault(); e.stopPropagation(); }
+    function processFile(file){
+      const reader=new FileReader();
+      reader.onload=(e)=>{
+        const lines=e.target.result.replace(/\r/g,'').split('\n').filter(x=>x.trim());
+        if(lines.length<2) return showNotification("CSV vide ou invalide.","error");
+        const headers = lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+        // accepte 6 ou 7 colonnes (docLink optionnel)
+        const ok6 = JSON.stringify(headers.slice(0,6))===JSON.stringify(EXPECTED_KEYS);
+        const ok7 = ok6 && headers[6]==='docLink';
+        if(!(ok6||ok7)) return showNotification("En-têtes CSV invalides.","error");
+        const imported={};
+        for(let i=1;i<lines.length;i++){
+          const parts = splitCsvLine(lines[i]); // gère les virgules dans quotes
+          if(!(parts.length===6 || parts.length===7)) return showNotification(`Ligne ${i+1}: nombre de colonnes incorrect.`, "error");
+          const [equipType,question,help,group,standard,docRef,docLink] = parts.map(v=>v.replace(/^"|"$/g,''));
+          if(!equipType || !question || !group) return showNotification(`Ligne ${i+1}: champs requis manquants.`, "error");
+          (imported[equipType]=imported[equipType]||[]).push({
+            question, help, type:"radio", options:["Conforme","Non conforme","À améliorer"], group, standard, docRef, ...(docLink?{docLink}:{})
+          });
+        }
+        customEquipments = imported;
+        populateEquipmentDropdown();
+        showNotification(`${Object.values(imported).flat().length} critère(s) importé(s).`,"success");
+        equipmentTypeSelect.value = Object.keys(imported)[0];
+        equipmentTypeSelect.dispatchEvent(new Event('change'));
+        navigateToStep('evaluation');
+      };
+      reader.readAsText(file,'UTF-8');
+    }
+    function splitCsvLine(line){
+      const out=[]; let cur='', inQ=false;
+      for(let i=0;i<line.length;i++){
+        const ch=line[i];
+        if(ch==='"' && line[i+1]==='"'){ cur+='"'; i++; continue; }
+        if(ch==='"'){ inQ=!inQ; continue; }
+        if(ch===',' && !inQ){ out.push(cur); cur=''; continue; }
+        cur+=ch;
+      }
+      out.push(cur); return out;
+    }
+
+    /**********************
+     * Démarrage
+     **********************/
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      // Navigation
+      document.querySelectorAll('.nav-item a[data-step]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigateToStep(a.dataset.step)}));
+      document.getElementById('start-eval-btn').addEventListener('click',()=>navigateToStep('evaluation'));
+      document.getElementById('generate-report-btn').addEventListener('click',generateReport);
+      document.getElementById('expand-all-btn').addEventListener('click',()=>toggleAllExpanders(true));
+      document.getElementById('collapse-all-btn').addEventListener('click',()=>toggleAllExpanders(false));
+      [ehedgFilter,threeAFilter,expertMode].forEach(el=>el.addEventListener('change',applyFiltersAndRefresh));
+
+      // Drag & drop
+      ;['dragenter','dragover','dragleave','drop'].forEach(ev=>dropArea.addEventListener(ev,preventDefaults,false));
+      ;['dragenter','dragover'].forEach(ev=>dropArea.addEventListener(ev,()=>dropArea.classList.add('dragover'),false));
+      ;['dragleave','drop'].forEach(ev=>dropArea.addEventListener(ev,()=>dropArea.classList.remove('dragover'),false));
+      dropArea.addEventListener('drop',e=>handleFiles(e.dataTransfer.files),false);
+      document.getElementById('file-select-btn').addEventListener('click',()=>fileInput.click());
+      fileInput.addEventListener('change',()=>{ if(fileInput.files.length) handleFiles(fileInput.files); });
+
+      // Modèle CSV
+      downloadTemplateBtn.addEventListener('click',(e)=>{
+        e.preventDefault();
+        const csv = `"Equipment Type","Question","Help Text","Group","Standard","Doc Ref","docLink"\n"MonEquipement","La surface est-elle lisse?","Vérifier le rapport de rugosité.","Matériaux","EHEDG","Doc. 8","https://exemple.org"`;
+        const blob = new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob); a.download='modele_import.csv'; a.click(); URL.revokeObjectURL(a.href);
+      });
+
+      // Charger la base JSON du repo
+      jsonEquipments = await loadJsonEnriched();
+      populateEquipmentDropdown();
+
+      // Restauration éventuelle
+      const saved = localStorage.getItem(STATE_KEY);
+      if(saved){ promptToRestoreState(JSON.parse(saved)); }
+    });
+
+    function populateEquipmentDropdown(){
+      // Nettoie puis remplit
+      equipmentTypeSelect.innerHTML = '<option value="">-- Choisissez --</option>';
+      getAllEquipmentTypes().forEach(et=>{
+        const opt=document.createElement('option'); opt.value=et; opt.textContent=et; equipmentTypeSelect.appendChild(opt);
+      });
+      equipmentTypeSelect.addEventListener('change',()=>{
+        const et = equipmentTypeSelect.value;
+        if(!et){
+          hygieneForm.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-light)"><i class="fas fa-arrow-up" style="font-size:2rem;margin-bottom:15px"></i><p>Sélectionnez un type d\'équipement pour commencer.</p></div>';
+          return;
+        }
+        currentRequirements = getCurrentRequirements(et);
+        buildForm(et,currentRequirements);
+        saveState();
+      });
+    }
+
+    // Impression (PDF natif du navigateur)
+    function printReport(){ window.print(); }
   </script>
 </body>
 </html>
