@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Évaluation Conception Hygiénique – Base principale + enrichie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root{--bg:#0b1220;--fg:#e6edf3;--muted:#9fb0c3;--acc:#4cc3ff}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .banner{background:#081023;border-bottom:1px solid #13233f;color:#fff;padding:.6rem 1rem}
+    .wrap{max-width:1100px;margin:1rem auto;padding:0 1rem}
+    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:0 0 1rem}
+    .pill{padding:.35rem .6rem;border:1px solid #2b3f66;border-radius:999px;color:#cfe3ff;background:#0e1a33}
+    .tag{padding:.15rem .5rem;border-radius:999px;border:1px solid #304b78;color:#b2c7e6;font-size:.8rem}
+    .list{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:.6rem}
+    @media(min-width:900px){.list{grid-template-columns:repeat(2,minmax(0,1fr));}}
+    .card{background:#0f1a31;border:1px solid #1b2d52;border-radius:16px;padding:1rem;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
+    .equip{font-weight:700;color:#e9f3ff}
+    .q{margin:.25rem 0 .5rem;font-size:1.02rem}
+    .help{color:var(--muted);font-size:.95rem}
+    .meta{margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap}
+    .expert a{color:var(--acc);text-decoration:none}
+    .expert a:hover{text-decoration:underline}
+    .status{font-weight:600}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="banner">
+    Chargement des données… <span id="loadStatus" class="status">base principale</span>
+  </div>
+
+  <div class="wrap">
+    <div class="toolbar">
+      <span class="pill">Déduplication (Type + Question)</span>
+      <span class="pill">Structure conservée (6 colonnes)</span>
+      <span class="pill">docLink facultatif</span>
+    </div>
+
+    <div id="app" class="list"></div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * CONFIG – Mets ici les URL des deux bases:
+     * - PRIMARY_JSON_URL    : ta base principale (ou laisse vide pour l’exemple)
+     * - ENRICHED_JSON_URL   : la base enrichie (ce dépôt GitHub Pages)
+     ********************************************************************/
+    const PRIMARY_JSON_URL  = ""; // ex: "./base_principale.json" (si tu en as une)
+    const ENRICHED_JSON_URL = "./hygienic_design_enriched.json"; // même repo GitHub Pages
+
+    // Colonnes strictes (structure d’origine)
+    const EXPECTED_KEYS = ["Equipment Type","Question","Help Text","Group","Standard","Doc Ref"];
+
+    // Jeu minimal si pas de base principale disponible
+    const FALLBACK_PRIMARY = [
+      {"Equipment Type":"convoyeur","Question":"Châssis ouvert (open frame), accès total pour le nettoyage ?","Help Text":"Privilégier montants ajourés ; éviter caissons fermés.","Group":"Conception Géométrique","Standard":"EHEDG","Doc Ref":"EHEDG Open Processing (2024)"}
+    ];
+
+    function makeKey(rec){
+      return `${(rec["Equipment Type"]||"").toLowerCase()}::${(rec["Question"]||"").toLowerCase()}`;
+    }
+
+    function normalizeRecord(rec){
+      const out = {};
+      for (const k of EXPECTED_KEYS) out[k] = (rec && rec[k]) || "";
+      if (typeof rec.docLink === "string" && /^https?:\/\//.test(rec.docLink)) out.docLink = rec.docLink;
+      return out;
+    }
+
+    async function fetchJsonMaybe(url){
+      if (!url) return null;
+      const res = await fetch(url, {cache:"no-store"});
+      if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
+      return await res.json();
+    }
+
+    async function getPrimaryData(){
+      document.getElementById('loadStatus').textContent = "base principale…";
+      try{
+        const data = await fetchJsonMaybe(PRIMARY_JSON_URL);
+        if (!data) return FALLBACK_PRIMARY.slice();
+        if (!Array.isArray(data)) throw new Error("Base principale: JSON doit être un tableau.");
+        return data.map(normalizeRecord);
+      }catch(e){
+        console.warn("Primary indisponible:", e);
+        return FALLBACK_PRIMARY.slice();
+      }
+    }
+
+    async function getEnrichedData(){
+      document.getElementById('loadStatus').textContent = "base enrichie…";
+      const res = await fetch(ENRICHED_JSON_URL, {cache:"no-store"});
+      if (!res.ok) throw new Error(`Base enrichie HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("Base enrichie: JSON doit être un tableau.");
+      return data.map(normalizeRecord);
+    }
+
+    function mergeBases(primary, enriched){
+      const map = new Map();
+      for (const r of primary) map.set(makeKey(r), normalizeRecord(r));
+      for (const r of enriched){
+        const k = makeKey(r);
+        if (!map.has(k)) {
+          map.set(k, normalizeRecord(r));
+        } else {
+          // Complète uniquement les champs vides de la base primaire
+          const base = map.get(k);
+          for (const key of EXPECTED_KEYS){
+            if (!base[key] && r[key]) base[key] = r[key];
+          }
+          if (!base.docLink && r.docLink) base.docLink = r.docLink;
+        }
+      }
+      return Array.from(map.values());
+    }
+
+    function renderUI(rows){
+      const app = document.getElementById('app');
+      app.innerHTML = "";
+      rows.forEach(r=>{
+        const card = document.createElement('div');
+        card.className = "card";
+        card.innerHTML = `
+          <div class="equip">${r["Equipment Type"]}</div>
+          <div class="q">${r["Question"]}</div>
+          <div class="help">${r["Help Text"]||""}</div>
+          <div class="meta">
+            ${r["Group"]? `<span class="tag">${r["Group"]}</span>`:""}
+            ${r["Standard"]? `<span class="tag">${r["Standard"]}</span>`:""}
+            ${r["Doc Ref"]? `<span class="tag">Réf: ${r["Doc Ref"]}</span>`:""}
+            ${r.docLink? `<span class="expert"><a href="${r.docLink}" target="_blank" rel="noopener">Lien</a></span>`:""}
+          </div>
+        `;
+        app.appendChild(card);
+      });
+      document.getElementById('loadStatus').textContent = "fusion terminée";
+    }
+
+    (async function bootstrap(){
+      try{
+        const primary = await getPrimaryData();
+        const enriched = await getEnrichedData().catch(e=>{
+          console.warn("Base enrichie indisponible:", e);
+          document.getElementById('loadStatus').textContent = "base enrichie indisponible (OK)";
+          return [];
+        });
+        const merged = mergeBases(primary, enriched);
+        renderUI(merged);
+      }catch(err){
+        console.error(err);
+        document.getElementById('loadStatus').textContent = "erreur de chargement";
+      }
+    })();
+  </script>
+</body>
+</html>
