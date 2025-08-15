@@ -1,0 +1,433 @@
+[
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Surfaces contact produit ≤ 0,8 µm Ra (ou plus lisse) ?",
+    "Help Text": "Exiger un état de surface équivalent 3-A (≤ 32 µin Ra ≈ 0,8 µm). À vérifier par certificat de rugosité ou profilomètre.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "3-A",
+    "Doc Ref": "3-A Sanitary Standards – surface finish ≤ 32 µin (0,8 µm) Ra",
+    "docLink": "https://www.3-a.org/Knowledge-Center"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Aucun filetage/extrémité creuse exposé en zone produit ?",
+    "Help Text": "Éviter toute cavité non nettoyable (boulons traversants, tubes non bouchés) pour prévenir l’accumulation.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Hygienic Design of Equipment for Open Processing (2024)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Châssis ouvert (open frame), accès total pour le nettoyage ?",
+    "Help Text": "Privilégier montants ajourés/sections rondes; éviter les caissons fermés en zone de lavage.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 13 – Open Processing (2024)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Bande démontable (libération rapide) et poulies relevables ?",
+    "Help Text": "Système de dégondage rapide/levage des rouleaux pour nettoyage des retours.",
+    "Group": "Maintenance",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 13 – Quick release & accessibility",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Pentes dirigées vers l’évacuation (≥ 1 %) ?",
+    "Help Text": "Concevoir des plans inclinés vers bords d’égout, éviter les fonds plats qui retiennent l’eau.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Yearbook 2023 – slope 1%",
+    "docLink": "https://www.ehedg.org/knowledge/white-papers/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Matériaux FCM conformes (CE 1935/2004 + GMP 2023/2006) ?",
+    "Help Text": "Déclarations de conformité, traçabilité; plastiques selon (UE) 10/2011 si applicable.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "UE",
+    "Doc Ref": "Reg. (CE) 1935/2004; Reg. (CE) 2023/2006; (UE) 10/2011",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32004R1935"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Éléments de transmission hors zone produit et protégés ?",
+    "Help Text": "Roulements, moteurs, chaînes isolés de la zone alimentaire, lubrifiants H1 uniquement.",
+    "Group": "Joints et Connexions",
+    "Standard": "EHEDG/NSF",
+    "Doc Ref": "EHEDG Doc 23 (H1/HT1 Registered Lubricants)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Soudures continues, pénétration totale, meulées et polies ?",
+    "Help Text": "Pas de chevauchement; continuité avec l’état de surface adjacent; inspection visuelle + borescope si besoin.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "EN/ISO/EHEDG",
+    "Doc Ref": "EN 1672-2; ISO 14159; EHEDG principles",
+    "docLink": "https://standards.iteh.ai/catalog/standards/cen/4d8ea2f2-6f36-4f6e-8b37-0e68b1f8ae5a/en-1672-2-2005a1-2009"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Absence d’angles vifs et arêtes vives en zone nettoyable ?",
+    "Help Text": "Rayons internes suffisants pour la nettoyabilité; éviter arêtes aigües et coins fermés.",
+    "Group": "Conception Géométrique",
+    "Standard": "EN/ISO",
+    "Doc Ref": "EN 1672-2; ISO 14159",
+    "docLink": "https://www.iso.org/standard/21652.html"
+  },
+
+  {
+    "Equipment Type": "pompe",
+    "Question": "Construction 316L (1.4404/1.4435) ou matériau équivalent ?",
+    "Help Text": "Compatibilité chimique et résistance à la corrosion; certificat matière (EN 10204).",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "EN/EHEDG",
+    "Doc Ref": "EN 1672-2; EHEDG Hygienic Design Principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "Design sans espaces morts/poches de produit ?",
+    "Help Text": "Chambres, couvercles, volutes conçus pour éviter les pièges à produit; orientations adaptées.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Hygienic Design Principles (closed equipment)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "Étanchéité d’arbre hygiénique (cartouche, face-face) ?",
+    "Help Text": "Joint mécanique nettoyable/CIPable; rinçage/barrière appropriés.",
+    "Group": "Joints et Connexions",
+    "Standard": "EHEDG/3-A",
+    "Doc Ref": "3-A pump standards; EHEDG valves/seals guidance",
+    "docLink": "https://www.3-a.org/Knowledge-Center"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "CIP validé (vitesse ≥ 1,5 m/s) et auto-vidange ?",
+    "Help Text": "Turbulent (Re>~4000). Vérifier vitesses de CIP et absence d’airs emprisonnés.",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG/industry",
+    "Doc Ref": "EHEDG cleanability method; industry rule-of-thumb 1,5 m/s",
+    "docLink": "https://www.newfoodmagazine.com/article/230/cleaning-in-place-in-the-food-industry/"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "Auto-drainage en position installée ?",
+    "Help Text": "Pièces et orifices orientés pour vidange complète après rinçage.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Hygienic Design Principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+
+  {
+    "Equipment Type": "filtre",
+    "Question": "Carter avec fond incliné et orifice de purge basse ?",
+    "Help Text": "Éviter les fonds plats; purge de rétention sous l’élément filtrant.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Hygienic Design Principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "filtre",
+    "Question": "Étanchéités affleurantes et non microporeuses ?",
+    "Help Text": "Joints PTFE/EPDM/FKM adaptés; pas de joints cordons non contrôlés.",
+    "Group": "Joints et Connexions",
+    "Standard": "UE/EHEDG",
+    "Doc Ref": "Reg. 1935/2004; EHEDG",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32004R1935"
+  },
+  {
+    "Equipment Type": "filtre",
+    "Question": "CIP/SIP validé selon méthode EHEDG ?",
+    "Help Text": "Confirmer couverture et rinçabilité après colmatage; tester selon protocole standard.",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG cleanability assessment",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+
+  {
+    "Equipment Type": "echangeur",
+    "Question": "Matériaux côté produit conformes FCM (316L, joints FCM) ?",
+    "Help Text": "Attestations de conformité FCM des plaques/tubes et joints (10/2011 si plastique).",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "UE",
+    "Doc Ref": "Reg. (CE) 1935/2004; (UE) 10/2011",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32011R0010"
+  },
+  {
+    "Equipment Type": "echangeur",
+    "Question": "Conception évitant zones d’ombre et fuites croisées ?",
+    "Help Text": "Double paroi/barrière; dispositifs détection mélange accidentel.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG principles; industry practice",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "echangeur",
+    "Question": "Nettoyabilité prouvée (v ≥ 1,5 m/s) selon protocole ?",
+    "Help Text": "Validation CIP par indicateurs (ATP, riboflavine, Δconductivité).",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG/industry",
+    "Doc Ref": "EHEDG Doc 2 method; New Food 2006",
+    "docLink": "https://www.newfoodmagazine.com/article/230/cleaning-in-place-in-the-food-industry/"
+  },
+
+  {
+    "Equipment Type": "cuve",
+    "Question": "Surface intérieure ≤ 0,8 µm Ra; soudures polies, continues ?",
+    "Help Text": "Mesurer Ra; soudures flush; pas de piqûres.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "3-A/EHEDG",
+    "Doc Ref": "3-A surface finish; EHEDG",
+    "docLink": "https://www.3-a.org/Knowledge-Center"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Dispositifs de nettoyage assurant couverture totale ?",
+    "Help Text": "Sphère rotative ou tête à jet validée (test riboflavine).",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 51 – Tank & vessel cleaning (2023)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Vannes et piquages sans ‘dead-leg’ (L/D ≤ 1 à 2) ?",
+    "Help Text": "EHEDG vise L/D ≤ 1; 3-A/ASME BPE L/D ≤ 2 en général.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG/3-A/BPE",
+    "Doc Ref": "EHEDG; 3-A/BPE dead-leg criteria",
+    "docLink": "https://www.gmp-compliance.org/gmp-news/avoidance-of-dead-legs-according-to-asme-bpe"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Fond et dômes inclinés (≥ 1 %) vers la bonde ?",
+    "Help Text": "Permet une vidange complète; éviter poches résiduelles.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Yearbook – 1% slope",
+    "docLink": "https://www.ehedg.org/knowledge/white-papers/"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Event/respiration hygiénique (filtre hydrophobe si besoin) ?",
+    "Help Text": "Éviter l’entrée de contaminants via l’évent; filtre stérile selon usage.",
+    "Group": "Joints et Connexions",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+
+  {
+    "Equipment Type": "vanne",
+    "Question": "Conception hygiénique (affleurante, pas de poches) ?",
+    "Help Text": "Choisir vannes certifiables EHEDG/3-A; géométries auto-vidange.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 14 – Requirements for valves",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "vanne",
+    "Question": "Étanchéités FCM et démontage aisé pour inspection ?",
+    "Help Text": "Joints traçables, démontage sans outil spécial pour contrôle.",
+    "Group": "Maintenance",
+    "Standard": "UE/EHEDG",
+    "Doc Ref": "Reg. 1935/2004; EHEDG Doc 14",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32004R1935"
+  },
+
+  {
+    "Equipment Type": "tank",
+    "Question": "Matériaux 316L/316L DDQ et finition sanitaire ?",
+    "Help Text": "Plaques conformes; soudures orbitales/polies.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "EN/3-A",
+    "Doc Ref": "EN 1672-2; 3-A surface finish",
+    "docLink": "https://standards.iteh.ai/catalog/standards/cen/4d8ea2f2-6f36-4f6e-8b37-0e68b1f8ae5a/en-1672-2-2005a1-2009"
+  },
+  {
+    "Equipment Type": "tank",
+    "Question": "CIP/SIP validé – couverture et écoulement de retour ?",
+    "Help Text": "Dimensionner pompe de retour ≥ débit d’alimentation CIP; limiter niveau pendant lavage.",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 51 (2023)",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "tank",
+    "Question": "Pentes internes/externes suffisantes pour égouttage ?",
+    "Help Text": "Minimiser rétention; inclinaison vers bondes/évacuations.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Yearbook 2023",
+    "docLink": "https://www.ehedg.org/knowledge/white-papers/"
+  },
+
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Pentes ≥ 1 % et auto-vidange sans poches ?",
+    "Help Text": "Tracer les lignes pour drainage gravitaire; éviter fonds plats.",
+    "Group": "Drainage & Pentes",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Yearbook 2023 – slope 1%",
+    "docLink": "https://www.ehedg.org/knowledge/white-papers/"
+  },
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Soudures orbitaires pleine pénétration; sans cordon interne ?",
+    "Help Text": "Contrôle visuel/boroscope; polissage si nécessaire.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "EN/ISO",
+    "Doc Ref": "EN 1672-2; ISO 14159",
+    "docLink": "https://www.iso.org/standard/21652.html"
+  },
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Rapport ‘dead-leg’ L/D ≤ 1 (EHEDG) ou ≤ 2 (3-A/BPE) ?",
+    "Help Text": "Réduire longueurs de piquages; utiliser T hygiéniques.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG/3-A/BPE",
+    "Doc Ref": "EHEDG; 3-A/BPE guidance",
+    "docLink": "https://forcetechnology.com/en/services/learning/cleaning-in-place-cip/what-are-dead-legs"
+  },
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Vitesse CIP ≥ 1,5 m/s (turbulent) contrôlée et enregistrée ?",
+    "Help Text": "Mesure par débitmètre durant CIP pour vérification et traçabilité.",
+    "Group": "Nettoyage / CIP",
+    "Standard": "EHEDG/industry",
+    "Doc Ref": "New Food 2006; OSU Fact Sheet CIP",
+    "docLink": "https://fst.osu.edu/sites/fst/files/imce/files/Cleaning/Sanitation_CleaningInPlace.pdf"
+  },
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Matériaux et joints conformes FCM (1935/2004, 10/2011) ?",
+    "Help Text": "Joints PTFE/EPDM/FKM conformes; DOC disponibles.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "UE",
+    "Doc Ref": "Reg. (CE) 1935/2004; (UE) 10/2011",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32011R0010"
+  },
+
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Lubrifiants classés NSF H1/HT1 uniquement ?",
+    "Help Text": "Pour contact fortuit; fiches techniques/attestations à conserver.",
+    "Group": "Maintenance",
+    "Standard": "EHEDG/NSF",
+    "Doc Ref": "EHEDG Doc 23 – Use of H1 & HT1 Registered Lubricants",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "Aucune vis cachée/zone filetée exposée en zone produit ?",
+    "Help Text": "Remplacer par fixations hygiéniques; capuchons sanitaires.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Open/Closed equipment principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "vanne",
+    "Question": "Compatibilité chimique joints vs détergents/désinfectants ?",
+    "Help Text": "Vérifier résistance EPDM/FKM/PTFE aux cycles de CIP/NaOH/Acide.",
+    "Group": "Joints et Connexions",
+    "Standard": "EN/UE",
+    "Doc Ref": "EN 1672-2; Reg. 1935/2004",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32004R1935"
+  },
+  {
+    "Equipment Type": "filtre",
+    "Question": "Présence d’un plan de contrôle migration (si plastiques) ?",
+    "Help Text": "Tests de migration globale/spécifique selon (UE) 10/2011.",
+    "Group": "Documentation & Certification",
+    "Standard": "UE",
+    "Doc Ref": "Reg. (UE) 10/2011",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32011R0010"
+  },
+  {
+    "Equipment Type": "echangeur",
+    "Question": "Dispositif de détection fuite joint (barrières, pressions) ?",
+    "Help Text": "Drainage entre circuits et capteurs de conductivité pour alerte.",
+    "Group": "Joints et Connexions",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Matériaux non toxiques/inerte, sans migration inacceptable ?",
+    "Help Text": "Exigences du cadre FCM; DOC et GMP documentés.",
+    "Group": "Matériaux et Surfaces",
+    "Standard": "UE",
+    "Doc Ref": "Reg. 1935/2004; 2023/2006",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32006R2023"
+  },
+  {
+    "Equipment Type": "tuyauterie",
+    "Question": "Supports/bridages hors zone ruissellement produit ?",
+    "Help Text": "Éviter surfaces horizontales collectrices au-dessus du produit.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Open Processing",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "tank",
+    "Question": "Raccords et sondes affleurants, sans rétentions ?",
+    "Help Text": "Sondes hygiéniques affleurantes; limiter entrées tangentielles longues.",
+    "Group": "Joints et Connexions",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "convoyeur",
+    "Question": "Gestion des ruissellements/retombées (bavettes, goulottes) ?",
+    "Help Text": "Éloigner visserie et support du flux produit.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Open Processing",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  },
+  {
+    "Equipment Type": "pompe",
+    "Question": "Documentation de conformité (dessins, matériaux, certificats) complète ?",
+    "Help Text": "Dossier technique: schémas, parts list, DOC FCM, certificats Ra.",
+    "Group": "Documentation & Certification",
+    "Standard": "EN/EHEDG",
+    "Doc Ref": "EN 1672-2; EHEDG principles",
+    "docLink": "https://standards.iteh.ai/catalog/standards/cen/4d8ea2f2-6f36-4f6e-8b37-0e68b1f8ae5a/en-1672-2-2005a1-2009"
+  },
+  {
+    "Equipment Type": "echangeur",
+    "Question": "Joint de plaque de qualité alimentaire, sans colle non FCM ?",
+    "Help Text": "Éviter colles non conformes; privilégier joints mécaniques FCM.",
+    "Group": "Joints et Connexions",
+    "Standard": "UE",
+    "Doc Ref": "Reg. 1935/2004; (UE) 10/2011",
+    "docLink": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32011R0010"
+  },
+  {
+    "Equipment Type": "cuve",
+    "Question": "Trappes et hublots hygiéniques (rebords inclinés, joints affleurants) ?",
+    "Help Text": "Éviter collectes d’eau autour des regards et charnières.",
+    "Group": "Conception Géométrique",
+    "Standard": "EHEDG",
+    "Doc Ref": "EHEDG Doc 51 / principles",
+    "docLink": "https://www.ehedg.org/knowledge/publications/"
+  }
+]
